@@ -49,7 +49,9 @@ resource "kubernetes_secret" "pypi-secret-config" {
     "config.ini" = templatefile("${path.module}/pypi-config.tpl", {
       pypi_aws_access_key_id     = var.pypi_aws_access_key_id,
       pypi_aws_access_key_secret = var.pypi_aws_access_key_secret,
-      pypi_bucket_name           = var.pypi_bucket_name
+      pypi_bucket_name           = var.pypi_bucket_name,
+      pypi_admin_user            = var.pypi_admin_user,
+      pypi_user_encrypted_pwd    = var.pypi_user_encrypted_pwd
     })
   }
   type = "Opaque"
@@ -82,7 +84,7 @@ resource "kubernetes_deployment" "pypi" {
           name  = "pypi-server"
 
           port {
-            container_port = 8080
+            container_port = 80
           }
 
           resources {
@@ -125,10 +127,10 @@ resource "kubernetes_service" "pypi" {
       App = kubernetes_deployment.pypi.spec.0.template.0.metadata[0].labels.App
     }
     port {
-      name = "http"
-      port        = 8080
-      protocol = "TCP"
-      target_port = 8080
+      name        = "http"
+      port        = 80
+      protocol    = "TCP"
+      target_port = 80
     }
     type = "LoadBalancer"
   }

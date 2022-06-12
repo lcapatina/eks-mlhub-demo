@@ -13,3 +13,13 @@ variable "pypi_bucket_name" {
   description = "The bucket to be used for PyPi storage"
   default     = "lcapatina-pypi-bucket"
 }
+
+variable "pypi_admin_user" {
+  type        = string
+  description = "The PyPi admin user"
+}
+
+variable "pypi_user_encrypted_pwd" {
+  type        = string
+  description = "The encrypted password for the PyPi admin user"
+}

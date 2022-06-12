@@ -17,8 +17,12 @@ storage.aws_access_key_id = ${pypi_aws_access_key_id}
 storage.aws_secret_access_key = ${pypi_aws_access_key_secret}
 storage.bucket = ${pypi_bucket_name}
 
-
 db.url = sqlite:////var/lib/pypicloud/db.sqlite
+
+auth.admins =
+  ${pypi_admin_user}
+
+user.pypi_admin_user = ${pypi_user_encrypted_pwd}
 
 # For beaker
 session.encrypt_key = none
@@ -39,7 +43,7 @@ reload-mercy = 15
 worker-reload-mercy = 15
 max-requests = 1000
 enable-threads = true
-http = 0.0.0.0:8080
+http = 0.0.0.0:80
 uid = pypicloud
 gid = pypicloud
 
