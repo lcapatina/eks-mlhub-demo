@@ -125,10 +125,34 @@ resource "kubernetes_service" "pypi" {
       App = kubernetes_deployment.pypi.spec.0.template.0.metadata[0].labels.App
     }
     port {
+      name = "http"
       port        = 8080
+      protocol = "TCP"
       target_port = 8080
     }
-
     type = "LoadBalancer"
   }
 }
+
+# # Ingress
+# resource "kubernetes_ingress" "pypi" {
+#   metadata {
+#     annotations {
+#       "kubernetes.io/ingress.class"                 = "traefik"
+#     }
+#     name      = "pypi"
+#   }
+#   spec {
+#     rule {
+#       host = "pypi-server.capatina.fr"
+#       http {
+#         path {
+#           backend {
+#             service_name = "${kubernetes_service.pypi.metadata.0.name}"
+#             service_port = 8080
+#           }
+#         }
+#       }
+#     }
+#   }
+# }
