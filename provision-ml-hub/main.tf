@@ -51,18 +51,23 @@ provider "helm" {
   }
 }
 
-# Namespace
-resource "kubernetes_namespace" "mlhub" {
-  metadata {
-    annotations = {
-      name = "mlhub"
-    }
-    name = "mlhub"
-  }
+# # Namespace
+# resource "kubernetes_namespace" "mlhub" {
+#   metadata {
+#     annotations = {
+#       name = "mlhub"
+#     }
+#     name = "mlhub"
+#   }
+# }
+
+locals {
+  namespace = var.release_name
 }
 
 resource "helm_release" "mlhub" {
-  name      = "mlhub"
-  chart     = "https://github.com/ml-tooling/ml-hub/releases/download/1.0.0/mlhub-chart-1.0.0.tgz"
-  namespace = "mlhub"
+  name             = var.release_name
+  chart            = "https://github.com/ml-tooling/ml-hub/releases/download/1.0.0/mlhub-chart-1.0.0.tgz"
+  namespace        = local.namespace
+  create_namespace = true
 }
