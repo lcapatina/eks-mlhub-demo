@@ -10,7 +10,7 @@ def check_package(pkg_name):
     # check if folder exists
     if not os.path.isdir(pkg_name):
         return False
-    if not os.path.isfile(os.path.join(pk_name, "__init__.py")):
+    if not os.path.isfile(os.path.join(pkg_name, "__init__.py")):
         return False
     # check if a setup.py file is present
     if not os.path.isfile("setup.py"):
