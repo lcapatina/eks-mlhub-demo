@@ -50,7 +50,7 @@ The output will publish the url on which the PyPi server is available. Open it i
 
 ## Provisioning MLHub
 
-MLHub is a platform based on JupyerHub allowing to create workspaces adapted to data science needs. A full description of the project can be found (here)[https://github.com/ml-tooling/ml-hub]. For this demo, we use a release present on the github page which contains the helm charts needed for provisioning.
+MLHub is a platform based on JupyerHub allowing to create workspaces adapted to data science needs. A full description of the project can be found [here](https://github.com/ml-tooling/ml-hub). For this demo, we use a release present on the github page which contains the helm charts needed for provisioning.
 
 Prerequisites:
 - the same profile needs to exist (`kube_admin`)
