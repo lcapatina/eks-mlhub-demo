@@ -4,7 +4,7 @@ variable "region" {
 }
 
 provider "aws" {
-  region = var.region
+  region  = var.region
   profile = "kube_admin"
 }
 
