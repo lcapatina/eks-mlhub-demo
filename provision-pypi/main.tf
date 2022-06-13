@@ -132,11 +132,12 @@ resource "kubernetes_service" "pypi" {
       protocol    = "TCP"
       target_port = 80
     }
-    # type = "LoadBalancer"
+    type = "LoadBalancer"
   }
 }
 
-# # Ingress
+# TODO - mentioned for further elements
+# # Ingress - to be investigated for adding a domain and the associated certificate
 # resource "kubernetes_ingress" "pypi" {
 #   metadata {
 #     annotations = {
@@ -147,7 +148,7 @@ resource "kubernetes_service" "pypi" {
 #   }
 #   spec {
 #     rule {
-#       host = "pypi-server.capatina.fr"
+#       host = "xxxxxxx"
 #       http {
 #         path {
 #           backend {

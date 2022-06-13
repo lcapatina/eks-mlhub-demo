@@ -21,6 +21,7 @@ resource "helm_release" "cert-manager" {
   ]
 }
 
+# TODO - mentioned for further elements
 # # create the route53 hosted zone to be used by Letsencrypt
 # resource "aws_route53_zone" "main" {
 #   name = "${var.domain}"

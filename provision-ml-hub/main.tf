@@ -51,16 +51,6 @@ provider "helm" {
   }
 }
 
-# # Namespace
-# resource "kubernetes_namespace" "mlhub" {
-#   metadata {
-#     annotations = {
-#       name = "mlhub"
-#     }
-#     name = "mlhub"
-#   }
-# }
-
 locals {
   namespace = var.release_name
 }
