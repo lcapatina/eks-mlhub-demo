@@ -132,15 +132,16 @@ resource "kubernetes_service" "pypi" {
       protocol    = "TCP"
       target_port = 80
     }
-    type = "LoadBalancer"
+    # type = "LoadBalancer"
   }
 }
 
 # # Ingress
 # resource "kubernetes_ingress" "pypi" {
 #   metadata {
-#     annotations {
+#     annotations = {
 #       "kubernetes.io/ingress.class"                 = "traefik"
+#       "cert-manager.io/cluster-issuer" = "letsencrypt"
 #     }
 #     name      = "pypi"
 #   }
@@ -151,7 +152,7 @@ resource "kubernetes_service" "pypi" {
 #         path {
 #           backend {
 #             service_name = "${kubernetes_service.pypi.metadata.0.name}"
-#             service_port = 8080
+#             service_port = 80
 #           }
 #         }
 #       }
