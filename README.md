@@ -84,3 +84,12 @@ index-servers=
     ekspypi
 ```
 - In order to publish the package, the distribution source needs to be created at the same time as the upload so the command will be: `python3 setup.py sdist upload -r ekspypi`. Building the distribution code before and then launching `python3 setup.py upload -r ekspypi` gives the following error message: `error: Must create and upload files in one command (e.g. setup.py sdist upload)`
+
+
+## Further elements
+
+### Adding a domain
+The best approach would be to add a Route53 zone, an external-dns pod inside the cluster and adding the necessary annotation in the k8s service in order to make it point to a domain. I would have chosen a subdomain from my personal domain however, I think some migration is needed as it is hosted at an exterior provider. I skipped this step not wanting to impact
+
+### Encrypting traffic
+Ideally, we should use https, port 443 in order to encrypt the traffic between client and PyPi server and MLHub. It will also ease the `pip install` command as the PyPi private repo won't need to be trusted anymore. We can use the cert-manager present in the cluster in order to query Letsencrypt to create a valid certificate for the domain. I think we can create an ingress which will redirect the traffic to the load balancer and which will handle the certificate and the domain.
