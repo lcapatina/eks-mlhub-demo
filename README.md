@@ -21,12 +21,12 @@ Steps to install the cluster:
 The state of the infrastructure will be saved in a local file `terraform.tfstate`. For simplicity, no integration with a remote system like Terraform Cloud has been added for now. The other provisionings described below will refer to this file in order to get the necessary information in order to connect to the K8s cluster. In case Terraform Cloud will be used, the workspaces will need to be shared inside the organization so that the state can be accessed.
 
 
-In order to interact with the cluster, `kubectl` needs to be configured: `aws eks --profile kube_admin --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)`
+In order to interact with the cluster, `kubectl` needs to be configured. In the folder `provision-eks`, execute the following: `aws eks --profile kube_admin --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)`
 
 ## Provisioning the PyPi server
 
 A PyPi server is used to store python packages.  
-In this deployment, S3 was chosen as the place of package persistance.  
+In this deployment, S3 was chosen as the place of package persistence.  
 
 Prerequisites:
 - the same profile needs to exist (`kube_admin`)
@@ -44,13 +44,13 @@ export TF_VAR_pypi_bucket_name=<s3-bucket-name>
 ```
 - go into the folder: `cd provision-pypi`
 - initialize the terraform working directory: `terraform init`
-- deploy the pypi server together with its associated k8s secret and configMap as well as the sevice to make it accessible: `terraform apply`
+- deploy the pypi server together with its associated k8s secret and configMap as well as theload balancer service to make it publicly accessible: `terraform apply`
 
 The output will publish the url on which the PyPi server is available. Open it in a browser and you'll se the UI of the PyPi server.
 
 ## Provisioning MLHub
 
-MLHub is a platform based on JupyerHub allowing to create workspaces adapted to data science needs. A full description of the project can be found [here](https://github.com/ml-tooling/ml-hub). For this demo, we use a release present on the github page which contains the helm charts needed for provisioning.
+MLHub is a platform based on JupyerHub allowing creating workspaces adapted to data science needs. A full description of the project can be found [here](https://github.com/ml-tooling/ml-hub). For this demo, we use a release present on the github page which contains the helm charts needed for provisioning.
 
 Prerequisites:
 - the same profile needs to exist (`kube_admin`)
@@ -83,13 +83,13 @@ index-servers=
     pypi
     ekspypi
 ```
-- In order to publish the package, the distribution source needs to be created at the same time as the upload so the command will be: `python3 setup.py sdist upload -r ekspypi`. Building the distribution code before and then launching `python3 setup.py upload -r ekspypi` gives the following error message: `error: Must create and upload files in one command (e.g. setup.py sdist upload)`
+- In order to publish the package, the distribution source needs to be created at the same time as the upload so the command will be: `python3 setup.py sdist upload -r ekspypi`. Building the distribution code before and then launching `python3 setup.py upload -r ekspypi` gives the following error message: `error: Must create and upload files in one command (e.g. setup.py sdist upload)`. A script called `upload2myPrivatePyPi.py` was also created in order to upload the package. In this context, it can be used as following: `python upload2myPrivatePyPi.py demo-pkg ekspypi`. It does a cmd line parameter check as well as verifying that the package is present.
 
 
 ## Further elements
 
 ### Adding a domain
-The best approach would be to add a Route53 zone, an external-dns pod inside the cluster and adding the necessary annotation in the k8s service in order to make it point to a domain. I would have chosen a subdomain from my personal domain however, I think some migration is needed as it is hosted at an exterior provider. I skipped this step not wanting to impact
+The best approach would be to add a `Route53` zone, an `external-dns` pod inside the cluster and adding the necessary annotation in the k8s service in order to make it point to a domain. I would have chosen a subdomain from my personal domain. However, I think some migration is needed as it is hosted at an exterior provider. I skipped this step as I wouldn't have had the necessary time to evaluate the impact of this migration.
 
 ### Encrypting traffic
-Ideally, we should use https, port 443 in order to encrypt the traffic between client and PyPi server and MLHub. It will also ease the `pip install` command as the PyPi private repo won't need to be trusted anymore. We can use the cert-manager present in the cluster in order to query Letsencrypt to create a valid certificate for the domain. I think we can create an ingress which will redirect the traffic to the load balancer and which will handle the certificate and the domain.
+Ideally, we should use https, port 443 in order to encrypt the traffic between client and PyPi server and MLHub. It will also ease the `pip install` command as the PyPi private repo won't need to be explicitly trusted anymore. We can use the `cert-manager` present in the cluster in order to query Letsencrypt to create a valid certificate for the domain. I think we can create an ingress which will redirect the traffic to the load balancer and which will handle the certificate and the domain.
